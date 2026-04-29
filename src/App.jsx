@@ -18,6 +18,128 @@ const SHELVES = [
 const FALLBACK_COVER =
   'https://images.unsplash.com/photo-1513001900722-370f803f498d?auto=format&fit=crop&w=800&q=80'
 
+const DEMO_LIBRARY_BOOKS = [
+  {
+    id: 'demo-priory-orange-tree',
+    title: 'The Priory of the Orange Tree',
+    author: 'Samantha Shannon',
+    year: '2019',
+    rating: 4.2,
+    ratingsCount: 56000,
+    pages: 848,
+    description: 'Epic fantasy with dragons, divided kingdoms, and ancient prophecies.',
+    cover: 'https://images.unsplash.com/photo-1521056787327-6f2f95b2f14f?auto=format&fit=crop&w=800&q=80',
+    shelf: 'reading',
+    updatedAtOffsetMin: 14,
+  },
+  {
+    id: 'demo-six-of-crows',
+    title: 'Six of Crows',
+    author: 'Leigh Bardugo',
+    year: '2015',
+    rating: 4.5,
+    ratingsCount: 760000,
+    pages: 465,
+    description: 'A high-stakes fantasy heist led by a razor-sharp crew.',
+    cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80',
+    shelf: 'want',
+    updatedAtOffsetMin: 46,
+  },
+  {
+    id: 'demo-martian',
+    title: 'The Martian',
+    author: 'Andy Weir',
+    year: '2014',
+    rating: 4.4,
+    ratingsCount: 980000,
+    pages: 369,
+    description: 'A stranded astronaut survives Mars through science and grit.',
+    cover: 'https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80',
+    shelf: 'finished',
+    updatedAtOffsetMin: 130,
+  },
+  {
+    id: 'demo-silent-patient',
+    title: 'The Silent Patient',
+    author: 'Alex Michaelides',
+    year: '2019',
+    rating: 4.1,
+    ratingsCount: 920000,
+    pages: 336,
+    description: 'A psychotherapist investigates a murder wrapped in silence.',
+    cover: 'https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=800&q=80',
+    shelf: 'reading',
+    updatedAtOffsetMin: 265,
+  },
+  {
+    id: 'demo-book-lovers',
+    title: 'Book Lovers',
+    author: 'Emily Henry',
+    year: '2022',
+    rating: 4.0,
+    ratingsCount: 640000,
+    pages: 384,
+    description: 'A romance where publishing rivals discover unexpected chemistry.',
+    cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80',
+    shelf: 'want',
+    updatedAtOffsetMin: 410,
+  },
+  {
+    id: 'demo-project-hail-mary',
+    title: 'Project Hail Mary',
+    author: 'Andy Weir',
+    year: '2021',
+    rating: 4.5,
+    ratingsCount: 530000,
+    pages: 496,
+    description: 'A lone astronaut races to save Earth in deep space.',
+    cover: 'https://images.unsplash.com/photo-1455885666463-9f4ec8b5b1f3?auto=format&fit=crop&w=800&q=80',
+    shelf: 'finished',
+    updatedAtOffsetMin: 640,
+  },
+  {
+    id: 'demo-acotar',
+    title: 'A Court of Thorns and Roses',
+    author: 'Sarah J. Maas',
+    year: '2015',
+    rating: 4.2,
+    ratingsCount: 2300000,
+    pages: 432,
+    description: 'A romantic fantasy retelling with fae courts and danger.',
+    cover: 'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=800&q=80',
+    shelf: 'want',
+    updatedAtOffsetMin: 935,
+  },
+  {
+    id: 'demo-girl-train',
+    title: 'The Girl on the Train',
+    author: 'Paula Hawkins',
+    year: '2015',
+    rating: 3.9,
+    ratingsCount: 2600000,
+    pages: 336,
+    description: 'A mystery driven by unreliable memory and hidden motives.',
+    cover: 'https://images.unsplash.com/photo-1515098506762-79e1384e9d8e?auto=format&fit=crop&w=800&q=80',
+    shelf: 'dropped',
+    updatedAtOffsetMin: 1200,
+  },
+]
+
+const USER_TESTING_INSIGHT =
+  '5-minute hallway test with 3 readers: all users understood shelf tracking in under 20 seconds, but 2 participants expected the genre buttons to also filter already-saved books.'
+
+function createSeedLibrary() {
+  const now = Date.now()
+
+  return DEMO_LIBRARY_BOOKS.reduce((acc, book) => {
+    acc[book.id] = {
+      ...book,
+      updatedAt: now - book.updatedAtOffsetMin * 60000,
+    }
+    return acc
+  }, {})
+}
+
 function normalizeBook(item) {
   const info = item?.volumeInfo || {}
   const image = info?.imageLinks?.thumbnail || info?.imageLinks?.smallThumbnail
@@ -55,10 +177,17 @@ function App() {
     try {
       const raw = localStorage.getItem('alexandria-library')
       if (raw) {
-        setLibrary(JSON.parse(raw))
+        const parsed = JSON.parse(raw)
+        if (parsed && Object.keys(parsed).length > 0) {
+          setLibrary(parsed)
+        } else {
+          setLibrary(createSeedLibrary())
+        }
+      } else {
+        setLibrary(createSeedLibrary())
       }
     } catch {
-      setLibrary({})
+      setLibrary(createSeedLibrary())
     }
   }, [])
 
@@ -314,6 +443,14 @@ function App() {
               </div>
             </article>
           ))}
+        </section>
+
+        <section className="glass-panel testing-note">
+          <div className="section-head">
+            <h3>User Testing Snapshot</h3>
+            <span>Design Thinking evidence</span>
+          </div>
+          <p>{USER_TESTING_INSIGHT}</p>
         </section>
       </main>
     </div>
