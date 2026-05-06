@@ -34,7 +34,7 @@ export default function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               className="gradient-text"
             >
-              BookVerse
+              Alexandria
             </motion.span>
           </Link>
           
