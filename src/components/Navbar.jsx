@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Home, LibraryBig, Users, UserCircle2, Bell, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useLibrary } from '../contexts/LibraryContext';
+import { useAuth } from '../contexts/AuthContext';
 import NotificationPanel from './NotificationPanel';
 
 export default function Navbar() {
@@ -14,10 +15,11 @@ export default function Navbar() {
   const avatarRef = useRef(null);
 
   const { unreadCount, userSettings, userPlan, PLAN_TIERS } = useLibrary();
+  const { logout } = useAuth();
   const plan = PLAN_TIERS[userPlan] || PLAN_TIERS.pro;
 
   const navLinks = [
-    { path: '/', label: 'Home', icon: Home },
+    { path: '/home', label: 'Home', icon: Home },
     { path: '/library', label: 'Library', icon: LibraryBig },
     { path: '/community', label: 'Community', icon: Users },
     { path: '/profile', label: 'Profile', icon: UserCircle2 },
@@ -48,7 +50,7 @@ export default function Navbar() {
 
         {/* Left: Logo + Nav */}
         <div className="flex items-center gap-8 md:gap-14">
-          <Link to="/" className="text-2xl font-bold tracking-tight shrink-0">
+          <Link to="/home" className="text-2xl font-bold tracking-tight shrink-0">
             <motion.span
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -171,7 +173,10 @@ export default function Navbar() {
                     </Link>
                   </div>
                   <div className="py-1.5 border-t border-white/5">
-                    <button className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-colors w-full">
+                    <button
+                      onClick={() => { logout(); navigate('/'); }}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-colors w-full"
+                    >
                       <LogOut size={15} /> Sign Out
                     </button>
                   </div>

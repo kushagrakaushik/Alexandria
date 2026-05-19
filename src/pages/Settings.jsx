@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
 import { useLibrary } from '../contexts/LibraryContext';
 import {
   User, Bell, Shield, CreditCard, Download, Trash2,
@@ -21,7 +22,13 @@ function ToggleSwitch({ value, onChange }) {
 
 export default function Settings() {
   const { userSettings, setUserSettings, userPlan, setUserPlan, PLAN_TIERS, readingGoal, setReadingGoal, exportLibrary } = useLibrary();
-  const [activeSection, setActiveSection] = useState('account');
+  const [searchParams] = useSearchParams();
+  const [activeSection, setActiveSection] = useState(searchParams.get('section') || 'account');
+
+  useEffect(() => {
+    const s = searchParams.get('section');
+    if (s) setActiveSection(s);
+  }, [searchParams]);
   const [saved, setSaved] = useState(false);
   const [localSettings, setLocalSettings] = useState({ ...userSettings });
   const [localGoal, setLocalGoal] = useState({ ...readingGoal });

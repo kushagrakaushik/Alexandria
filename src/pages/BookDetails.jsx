@@ -40,7 +40,7 @@ export default function BookDetails() {
       exit={{ opacity: 0 }}
       className="relative z-10 space-y-16 pb-20 mt-4"
     >
-      <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-bold tracking-wider hover:-translate-x-1 duration-300">
+      <Link to="/home" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-bold tracking-wider hover:-translate-x-1 duration-300">
         <ChevronLeft size={16} /> Back to Hub
       </Link>
 
