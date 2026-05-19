@@ -8,6 +8,7 @@ import BookDetails from './pages/BookDetails';
 import Search from './pages/Search';
 import Profile from './pages/Profile';
 import Community from './pages/Community';
+import Settings from './pages/Settings';
 import { LibraryProvider } from './contexts/LibraryContext';
 import Toast from './components/Toast';
 
@@ -28,6 +29,7 @@ function AppContent() {
             <Route path="/search" element={<Search />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </AnimatePresence>
       </main>
